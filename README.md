@@ -1,246 +1,237 @@
+# SciFiGPT
 
-# nanoGPT
+SciFiGPT is a small GPT-style decoder-only Transformer trained from scratch on a Gutenberg-style science-fiction corpus. It is built on Andrej Karpathy's nanoGPT codebase, which I adapted with custom data preparation, training configurations, evaluation tools, loss visualizations, and a Streamlit interface for generation.
 
-![nanoGPT](assets/nanogpt.jpg)
+## Demo
 
+Screenshot or short demo link coming soon.
 
----
+To run the local demo after preparing data and training a checkpoint:
 
-**Update Nov 2025** nanoGPT has a new and improved cousin called [nanochat](https://github.com/karpathy/nanochat). It is very likely you meant to use/find nanochat instead. nanoGPT (this repo) is now very old and deprecated but I will leave it up for posterity.
-
----
-
-The simplest, fastest repository for training/finetuning medium-sized GPTs. It is a rewrite of [minGPT](https://github.com/karpathy/minGPT) that prioritizes teeth over education. Still under active development, but currently the file `train.py` reproduces GPT-2 (124M) on OpenWebText, running on a single 8XA100 40GB node in about 4 days of training. The code itself is plain and readable: `train.py` is a ~300-line boilerplate training loop and `model.py` a ~300-line GPT model definition, which can optionally load the GPT-2 weights from OpenAI. That's it.
-
-![repro124m](assets/gpt2_124M_loss.png)
-
-## SciFiGPT (Gutenberg science fiction)
-
-This tree adds **SciFiGPT**: a small GPT-style Transformer trained from scratch on a [Project Gutenberg](https://www.gutenberg.org/)-style science fiction corpus (see [PROJECT_README.md](PROJECT_README.md)). It is a learning/portfolio skeleton: training works end-to-end, but validation loss lands around **~4** on a compact local run and **generations are still rough**—not a polished chat model.
-
-`train.bin`, `val.bin`, `meta.pkl`, checkpoints under `out-*`, and virtualenvs are gitignored. After `prepare.py` and training, you can sample and open the Streamlit UI.
-
-```sh
-python scripts/parse_training_log.py train_gutenberg_mps.log
-python scripts/evaluate_checkpoint.py --out_dir=out-gutenberg-scifi-mps --device=cpu
+```bash
 streamlit run app.py
 ```
 
-Because the code is so simple, it is very easy to hack to your needs, train new models from scratch, or finetune pretrained checkpoints (e.g. biggest one currently available as a starting point would be the GPT-2 1.3B model from OpenAI).
+## What This Project Is
 
-## install
+SciFiGPT is an educational language-modeling project that takes a public-domain science-fiction text corpus through the full workflow: dataset preparation, GPT-2 BPE tokenization, training a compact decoder-only Transformer from scratch, sampling from checkpoints, evaluating validation loss and perplexity, visualizing training behavior, and presenting the model in a Streamlit UI.
 
-```
-pip install torch numpy transformers datasets tiktoken wandb tqdm
-```
+This is not a full GPT-2 reproduction and is not presented as production-quality text generation. The goal is to demonstrate the end-to-end mechanics of building and evaluating a small language model on a custom corpus.
 
-Dependencies:
+## What I Changed From nanoGPT
 
-- [pytorch](https://pytorch.org) <3
-- [numpy](https://numpy.org/install/) <3
--  `transformers` for huggingface transformers <3 (to load GPT-2 checkpoints)
--  `datasets` for huggingface datasets <3 (if you want to download + preprocess OpenWebText)
--  `tiktoken` for OpenAI's fast BPE code <3
--  `wandb` for optional logging <3
--  `tqdm` for progress bars <3
+This repository keeps nanoGPT's readable PyTorch Transformer model and training loop as the foundation, then adapts the project around SciFiGPT-specific data, experiments, and presentation.
 
-## quick start
+My main additions include:
 
-If you are not a deep learning professional and you just want to feel the magic and get your feet wet, the fastest way to get started is to train a character-level GPT on the works of Shakespeare. First, we download it as a single (1MB) file and turn it from raw text into one large stream of integers:
+- Gutenberg-style science-fiction dataset preparation in `data/gutenberg_scifi/prepare.py`
+- SciFiGPT-specific CPU, Apple Silicon MPS, and CUDA training configs
+- local checkpoint sampling workflow for science-fiction prompts
+- checkpoint evaluation script for validation loss, perplexity, and parameter counts
+- training-log parsing and loss/perplexity CSV generation
+- Streamlit generation and dashboard UI in `app.py`
+- project documentation that presents SciFiGPT honestly as a nanoGPT-based portfolio project
 
-```sh
-python data/shakespeare_char/prepare.py
-```
+## Why I Built It
 
-This creates a `train.bin` and `val.bin` in that data directory. Now it is time to train your GPT. The size of it very much depends on the computational resources of your system:
+I built SciFiGPT to understand the practical language-modeling pipeline beyond calling a hosted model API. The project focuses on how raw text becomes tokens, how a decoder-only Transformer is trained for next-token prediction, how loss and perplexity relate to generation quality, and how to communicate experimental results without overstating model capability.
 
-**I have a GPU**. Great, we can quickly train a baby GPT with the settings provided in the [config/train_shakespeare_char.py](config/train_shakespeare_char.py) config file:
+## What This Project Demonstrates
 
-```sh
-python train.py config/train_shakespeare_char.py
-```
+- preparing a custom text corpus for language modeling
+- tokenizing text with GPT-2 BPE
+- training a decoder-only Transformer from scratch
+- understanding loss, validation loss, and perplexity
+- generating text autoregressively from checkpoints
+- visualizing training behavior
+- presenting an experimental model honestly
 
-If you peek inside it, you'll see that we're training a GPT with a context size of up to 256 characters, 384 feature channels, and it is a 6-layer Transformer with 6 heads in each layer. On one A100 GPU this training run takes about 3 minutes and the best validation loss is 1.4697. Based on the configuration, the model checkpoints are being written into the `--out_dir` directory `out-shakespeare-char`. So once the training finishes we can sample from the best model by pointing the sampling script at this directory:
+## Current Results
 
-```sh
-python sample.py --out_dir=out-shakespeare-char
-```
+After an overnight local training run of roughly 5000 iterations, the model reached a loss of around 4.0. Generated text often has local grammar and a science-fiction-like tone, but it does not yet maintain reliable long-range coherence.
 
-This generates a few samples, for example:
+This is expected for a compact model trained locally with limited compute. The goal of this project is not to reproduce GPT-2-scale performance, but to demonstrate the full language-modeling pipeline from data preparation to training, evaluation, visualization, and interactive generation.
 
-```
-ANGELO:
-And cowards it be strawn to my bed,
-And thrust the gates of my threats,
-Because he that ale away, and hang'd
-An one with him.
+Roughly 4 nats of cross-entropy corresponds to perplexity around `e^4`, or about 55. That means the model has learned useful local token statistics and some genre texture, while still struggling with long-form structure, factual consistency, and stable story arcs.
 
-DUKE VINCENTIO:
-I thank your eyes against it.
+## Installation
 
-DUKE VINCENTIO:
-Then will answer him to save the malm:
-And what have you tyrannous shall do this?
+From the repository root:
 
-DUKE VINCENTIO:
-If you have done evils of all disposition
-To end his power, the day of thrust for a common men
-That I leave, to fight with over-liking
-Hasting in a roseman.
+```bash
+pip install -r requirements-scifi-gpt.txt
 ```
 
-lol  `¯\_(ツ)_/¯`. Not bad for a character-level model after 3 minutes of training on a GPU. Better results are quite likely obtainable by instead finetuning a pretrained GPT-2 model on this dataset (see finetuning section later).
+Or install the main dependencies manually:
 
-**I only have a macbook** (or other cheap computer). No worries, we can still train a GPT but we want to dial things down a notch. I recommend getting the bleeding edge PyTorch nightly ([select it here](https://pytorch.org/get-started/locally/) when installing) as it is currently quite likely to make your code more efficient. But even without it, a simple train run could look as follows:
-
-```sh
-python train.py config/train_shakespeare_char.py --device=cpu --compile=False --eval_iters=20 --log_interval=1 --block_size=64 --batch_size=12 --n_layer=4 --n_head=4 --n_embd=128 --max_iters=2000 --lr_decay_iters=2000 --dropout=0.0
+```bash
+pip install torch numpy transformers datasets tiktoken tqdm streamlit pandas
 ```
 
-Here, since we are running on CPU instead of GPU we must set both `--device=cpu` and also turn off PyTorch 2.0 compile with `--compile=False`. Then when we evaluate we get a bit more noisy but faster estimate (`--eval_iters=20`, down from 200), our context size is only 64 characters instead of 256, and the batch size only 12 examples per iteration, not 64. We'll also use a much smaller Transformer (4 layers, 4 heads, 128 embedding size), and decrease the number of iterations to 2000 (and correspondingly usually decay the learning rate to around max_iters with `--lr_decay_iters`). Because our network is so small we also ease down on regularization (`--dropout=0.0`). This still runs in about ~3 minutes, but gets us a loss of only 1.88 and therefore also worse samples, but it's still good fun:
+Use a recent PyTorch build for your platform. The included configs cover CPU, CUDA, and Apple Silicon MPS.
 
-```sh
-python sample.py --out_dir=out-shakespeare-char --device=cpu
-```
-Generates samples like this:
+## Dataset Preparation
 
-```
-GLEORKEN VINGHARD III:
-Whell's the couse, the came light gacks,
-And the for mought you in Aut fries the not high shee
-bot thou the sought bechive in that to doth groan you,
-No relving thee post mose the wear
-```
+The SciFiGPT dataset script writes files in nanoGPT's expected format:
 
-Not bad for ~3 minutes on a CPU, for a hint of the right character gestalt. If you're willing to wait longer, feel free to tune the hyperparameters, increase the size of the network, the context length (`--block_size`), the length of training, etc.
+- `data/gutenberg_scifi/train.bin`
+- `data/gutenberg_scifi/val.bin`
+- `data/gutenberg_scifi/meta.pkl`
+- `data/gutenberg_scifi/dataset_info.json`
 
-Finally, on Apple Silicon Macbooks and with a recent PyTorch version make sure to add `--device=mps` (short for "Metal Performance Shaders"); PyTorch then uses the on-chip GPU that can *significantly* accelerate training (2-3X) and allow you to use larger networks. See [Issue 28](https://github.com/karpathy/nanoGPT/issues/28) for more.
+The binary token files and metadata pickle are generated artifacts and are ignored by git.
 
-## reproducing GPT-2
+Prepare the default quick dataset:
 
-A more serious deep learning professional may be more interested in reproducing GPT-2 results. So here we go - we first tokenize the dataset, in this case the [OpenWebText](https://openwebtext2.readthedocs.io/en/latest/), an open reproduction of OpenAI's (private) WebText:
-
-```sh
-python data/openwebtext/prepare.py
+```bash
+python data/gutenberg_scifi/prepare.py
 ```
 
-This downloads and tokenizes the [OpenWebText](https://huggingface.co/datasets/openwebtext) dataset. It will create a `train.bin` and `val.bin` which holds the GPT2 BPE token ids in one sequence, stored as raw uint16 bytes. Then we're ready to kick off training. To reproduce GPT-2 (124M) you'll want at least an 8X A100 40GB node and run:
+Prepare the larger science-fiction corpus:
 
-```sh
-torchrun --standalone --nproc_per_node=8 train.py config/train_gpt2.py
+```bash
+python data/gutenberg_scifi/prepare.py --dataset_name stevez80/Sci-Fi-Books-gutenberg
 ```
 
-This will run for about 4 days using PyTorch Distributed Data Parallel (DDP) and go down to loss of ~2.85. Now, a GPT-2 model just evaluated on OWT gets a val loss of about 3.11, but if you finetune it it will come down to ~2.85 territory (due to an apparent domain gap), making the two models ~match.
+Run a smaller smoke test:
 
-If you're in a cluster environment and you are blessed with multiple GPU nodes you can make GPU go brrrr e.g. across 2 nodes like:
-
-```sh
-# Run on the first (master) node with example IP 123.456.123.456:
-torchrun --nproc_per_node=8 --nnodes=2 --node_rank=0 --master_addr=123.456.123.456 --master_port=1234 train.py
-# Run on the worker node:
-torchrun --nproc_per_node=8 --nnodes=2 --node_rank=1 --master_addr=123.456.123.456 --master_port=1234 train.py
+```bash
+python data/gutenberg_scifi/prepare.py --max_books 20
+python scripts/check_gutenberg_setup.py
 ```
 
-It is a good idea to benchmark your interconnect (e.g. iperf3). In particular, if you don't have Infiniband then also prepend `NCCL_IB_DISABLE=1` to the above launches. Your multinode training will work, but most likely _crawl_. By default checkpoints are periodically written to the `--out_dir`. We can sample from the model by simply `python sample.py`.
+## Training
 
-Finally, to train on a single GPU simply run the `python train.py` script. Have a look at all of its args, the script tries to be very readable, hackable and transparent. You'll most likely want to tune a number of those variables depending on your needs.
+CPU tiny config:
 
-## baselines
-
-OpenAI GPT-2 checkpoints allow us to get some baselines in place for openwebtext. We can get the numbers as follows:
-
-```sh
-$ python train.py config/eval_gpt2.py
-$ python train.py config/eval_gpt2_medium.py
-$ python train.py config/eval_gpt2_large.py
-$ python train.py config/eval_gpt2_xl.py
+```bash
+python train.py config/train_gutenberg_scifi_tiny.py
 ```
 
-and observe the following losses on train and val:
+Apple Silicon MPS config:
 
-| model | params | train loss | val loss |
-| ------| ------ | ---------- | -------- |
-| gpt2 | 124M         | 3.11  | 3.12     |
-| gpt2-medium | 350M  | 2.85  | 2.84     |
-| gpt2-large | 774M   | 2.66  | 2.67     |
-| gpt2-xl | 1558M     | 2.56  | 2.54     |
-
-However, we have to note that GPT-2 was trained on (closed, never released) WebText, while OpenWebText is just a best-effort open reproduction of this dataset. This means there is a dataset domain gap. Indeed, taking the GPT-2 (124M) checkpoint and finetuning on OWT directly for a while reaches loss down to ~2.85. This then becomes the more appropriate baseline w.r.t. reproduction.
-
-## finetuning
-
-Finetuning is no different than training, we just make sure to initialize from a pretrained model and train with a smaller learning rate. For an example of how to finetune a GPT on new text go to `data/shakespeare` and run `prepare.py` to download the tiny shakespeare dataset and render it into a `train.bin` and `val.bin`, using the OpenAI BPE tokenizer from GPT-2. Unlike OpenWebText this will run in seconds. Finetuning can take very little time, e.g. on a single GPU just a few minutes. Run an example finetuning like:
-
-```sh
-python train.py config/finetune_shakespeare.py
+```bash
+python train.py config/train_gutenberg_scifi_mps.py
 ```
 
-This will load the config parameter overrides in `config/finetune_shakespeare.py` (I didn't tune them much though). Basically, we initialize from a GPT2 checkpoint with `init_from` and train as normal, except shorter and with a small learning rate. If you're running out of memory try decreasing the model size (they are `{'gpt2', 'gpt2-medium', 'gpt2-large', 'gpt2-xl'}`) or possibly decreasing the `block_size` (context length). The best checkpoint (lowest validation loss) will be in the `out_dir` directory, e.g. in `out-shakespeare` by default, per the config file. You can then run the code in `sample.py --out_dir=out-shakespeare`:
+Single-GPU CUDA config:
 
-```
-THEODORE:
-Thou shalt sell me to the highest bidder: if I die,
-I sell thee to the first; if I go mad,
-I sell thee to the second; if I
-lie, I sell thee to the third; if I slay,
-I sell thee to the fourth: so buy or sell,
-I tell thee again, thou shalt not sell my
-possession.
-
-JULIET:
-And if thou steal, thou shalt not sell thyself.
-
-THEODORE:
-I do not steal; I sell the stolen goods.
-
-THEODORE:
-Thou know'st not what thou sell'st; thou, a woman,
-Thou art ever a victim, a thing of no worth:
-Thou hast no right, no right, but to be sold.
+```bash
+python train.py config/train_gutenberg_scifi_cuda.py
 ```
 
-Whoa there, GPT, entering some dark place over there. I didn't really tune the hyperparameters in the config too much, feel free to try!
+Checkpoints are written to the config's `out_dir`, such as `out-gutenberg-scifi-mps`. Checkpoint files can be large and are ignored by git.
 
-## sampling / inference
+## Sampling
 
-Use the script `sample.py` to sample either from pre-trained GPT-2 models released by OpenAI, or from a model you trained yourself. For example, here is a way to sample from the largest available `gpt2-xl` model:
+Sample from a trained CPU checkpoint:
 
-```sh
-python sample.py \
-    --init_from=gpt2-xl \
-    --start="What is the answer to life, the universe, and everything?" \
-    --num_samples=5 --max_new_tokens=100
+```bash
+python sample.py --out_dir=out-gutenberg-scifi-tiny --device=cpu --start="The machine began to dream"
 ```
 
-If you'd like to sample from a model you trained, use the `--out_dir` to point the code appropriately. You can also prompt the model with some text from a file, e.g. ```python sample.py --start=FILE:prompt.txt```.
+Sample from an Apple Silicon MPS checkpoint:
 
-## efficiency notes
+```bash
+python sample.py --out_dir=out-gutenberg-scifi-mps --device=mps --start="Beyond the red planet"
+```
 
-For simple model benchmarking and profiling, `bench.py` might be useful. It's identical to what happens in the meat of the training loop of `train.py`, but omits much of the other complexities.
+Adjust `--out_dir`, `--device`, `--temperature`, `--top_k`, and `--max_new_tokens` to match the checkpoint and generation style you want to test.
 
-Note that the code by default uses [PyTorch 2.0](https://pytorch.org/get-started/pytorch-2.0/). At the time of writing (Dec 29, 2022) this makes `torch.compile()` available in the nightly release. The improvement from the one line of code is noticeable, e.g. cutting down iteration time from ~250ms / iter to 135ms / iter. Nice work PyTorch team!
+## Streamlit UI
 
-## todos
+Run the local interface from the repository root:
 
-- Investigate and add FSDP instead of DDP
-- Eval zero-shot perplexities on standard evals (e.g. LAMBADA? HELM? etc.)
-- Finetune the finetuning script, I think the hyperparams are not great
-- Schedule for linear batch size increase during training
-- Incorporate other embeddings (rotary, alibi)
-- Separate out the optim buffers from model params in checkpoints I think
-- Additional logging around network health (e.g. gradient clip events, magnitudes)
-- Few more investigations around better init etc.
+```bash
+streamlit run app.py
+```
 
-## troubleshooting
+The UI loads a selected checkpoint directory, exposes generation controls, and can display parsed training metrics when a metrics CSV is available.
 
-Note that by default this repo uses PyTorch 2.0 (i.e. `torch.compile`). This is fairly new and experimental, and not yet available on all platforms (e.g. Windows). If you're running into related error messages try to disable this by adding `--compile=False` flag. This will slow down the code but at least it will run.
+## Evaluation And Visualization
 
-For some context on this repository, GPT, and language modeling it might be helpful to watch my [Zero To Hero series](https://karpathy.ai/zero-to-hero.html). Specifically, the [GPT video](https://www.youtube.com/watch?v=kCc8FmEb1nY) is popular if you have some prior language modeling context.
+Evaluate a trained checkpoint:
 
-For more questions/discussions feel free to stop by **#nanoGPT** on Discord:
+```bash
+python scripts/evaluate_checkpoint.py --out_dir=out-gutenberg-scifi-mps --device=cpu
+```
 
-[![](https://dcbadge.vercel.app/api/server/3zy8kqD9Cp?compact=true&style=flat)](https://discord.gg/3zy8kqD9Cp)
+Parse a nanoGPT training log into metrics:
 
-## acknowledgements
+```bash
+python scripts/parse_training_log.py train_gutenberg_mps.log
+```
 
-All nanoGPT experiments are powered by GPUs on [Lambda labs](https://lambdalabs.com), my favorite Cloud GPU provider. Thank you Lambda labs for sponsoring nanoGPT!
+This writes a CSV such as `metrics/train_gutenberg_mps_metrics.csv`, which can be used by the Streamlit UI to visualize loss and perplexity over training.
+
+## Repository Structure
+
+```text
+.
+├── app.py                              # Streamlit UI for generation and metrics
+├── config/
+│   ├── train_gutenberg_scifi_tiny.py   # compact CPU training config
+│   ├── train_gutenberg_scifi_mps.py    # Apple Silicon training config
+│   └── train_gutenberg_scifi_cuda.py   # single-GPU CUDA training config
+├── data/gutenberg_scifi/
+│   ├── prepare.py                      # Gutenberg-style corpus preparation
+│   └── dataset_info.json               # small dataset provenance summary
+├── metrics/                            # parsed training metrics
+├── scripts/
+│   ├── check_gutenberg_setup.py        # data setup sanity checks
+│   ├── evaluate_checkpoint.py          # validation loss/perplexity report
+│   └── parse_training_log.py           # training log to CSV parser
+├── model.py                            # nanoGPT Transformer model
+├── train.py                            # nanoGPT training loop
+├── sample.py                           # checkpoint sampling script
+└── requirements-scifi-gpt.txt
+```
+
+The repository also retains nanoGPT's original examples, including Shakespeare, OpenWebText, GPT-2 evaluation configs, and notebooks. These are useful references for understanding the inherited training code, but the top-level project focus is SciFiGPT.
+
+## Attribution
+
+This project is built on top of Andrej Karpathy's nanoGPT, a minimal implementation of GPT training in PyTorch. I used nanoGPT as the educational research codebase for the Transformer training loop and adapted it into a custom science-fiction language-modeling project.
+
+Original nanoGPT repository:
+https://github.com/karpathy/nanoGPT
+
+My contributions in this repo include:
+
+- Gutenberg-style science-fiction dataset preparation
+- SciFiGPT-specific training configs
+- local CPU/MPS/CUDA training setup
+- checkpoint sampling workflow
+- evaluation scripts
+- loss/perplexity visualization
+- Streamlit generation and dashboard UI
+- README/documentation rewrite for this project
+
+## nanoGPT Background
+
+nanoGPT is a compact PyTorch codebase for training and finetuning GPT-style models. Its core files, especially `train.py` and `model.py`, provide a readable implementation of the training loop and Transformer architecture. The original nanoGPT project also includes examples for character-level Shakespeare training, OpenWebText preprocessing, GPT-2 evaluation configs, and GPT-2 checkpoint loading.
+
+SciFiGPT uses that codebase as a starting point rather than claiming a from-scratch implementation of every training component.
+
+## Honest Limitations
+
+- The model is compact and trained with local compute, so generations are much weaker than modern hosted LLMs.
+- Loss around 4.0 is useful for demonstrating learning, but not enough for reliable long-range coherence.
+- The corpus is Gutenberg-style science fiction, so outputs can inherit old public-domain style, artifacts, and biases from the source text.
+- Checkpoints, tokenized binary datasets, and local environment files are intentionally not committed.
+- The Streamlit UI is a local demo interface, not a production deployment.
+- Results depend heavily on training duration, hardware, dataset quality, and sampling settings.
+
+## Future Improvements
+
+- train longer runs with larger model sizes and better hardware
+- improve corpus filtering, deduplication, and metadata cleanup
+- compare multiple context lengths and model sizes
+- add more systematic sample quality evaluation
+- track experiments with a structured experiment logger
+- publish a demo video or screenshot
+- add optional hosted inference once a checkpoint is small enough to serve reliably
+
+## License
+
+This repository inherits nanoGPT's MIT License. See `LICENSE` for details.
