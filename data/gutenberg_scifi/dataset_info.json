@@ -1,0 +1,52 @@
+{
+  "dataset_name": "stevez80/Sci-Fi-Books-gutenberg",
+  "rows_seen": 3354,
+  "num_books_used": 3323,
+  "num_train_books": 3157,
+  "num_val_books": 166,
+  "train_tokens": 98608899,
+  "val_tokens": 5158808,
+  "total_tokens": 103767707,
+  "preview": [
+    {
+      "title": "'Stalemate in Space'",
+      "author": "'Harness, Charles L.'"
+    },
+    {
+      "title": "'Badge of Infamy'",
+      "author": "'Del Rey, Lester'"
+    },
+    {
+      "title": "'Heel'",
+      "author": "'Farmer, Philip Jos\u00e9'"
+    },
+    {
+      "title": "'An Eel by the Tail'",
+      "author": "'Lang, Allen Kim'"
+    },
+    {
+      "title": "'The Indulgence of Negu Mah'",
+      "author": "'Arthur, Robert'"
+    },
+    {
+      "title": "\"Angel's Egg\"",
+      "author": "'Pangborn, Edgar'"
+    },
+    {
+      "title": "'Recoil'",
+      "author": "'Smith, George O. (George Oliver)'"
+    },
+    {
+      "title": "'That Sweet Little Old Lady'",
+      "author": "'Garrett, Randall'"
+    },
+    {
+      "title": "'Time and the Woman'",
+      "author": "'Dewey, G. Gordon'"
+    },
+    {
+      "title": "'But the Patient Lived'",
+      "author": "'Warner, Harry'"
+    }
+  ]
+}

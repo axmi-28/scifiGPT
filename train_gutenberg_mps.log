@@ -1,0 +1,586 @@
+/Users/andyxu/Desktop/nanogpt/nanoGPT/train.py:196: FutureWarning: `torch.cuda.amp.GradScaler(args...)` is deprecated. Please use `torch.amp.GradScaler('cuda', args...)` instead.
+  scaler = torch.cuda.amp.GradScaler(enabled=(dtype == 'float16'))
+Overriding config with config/train_gutenberg_scifi_mps.py:
+# Apple Silicon SciFi-GPT config.
+
+out_dir = "out-gutenberg-scifi-mps"
+dataset = "gutenberg_scifi"
+init_from = "scratch"
+
+eval_interval = 250
+log_interval = 10
+eval_iters = 100
+always_save_checkpoint = True
+wandb_log = False
+
+# MPS can handle a longer context and wider model than the CPU preset while
+# staying small enough for a local educational training run.
+block_size = 256
+batch_size = 32
+gradient_accumulation_steps = 1
+
+n_layer = 6
+n_head = 6
+n_embd = 384
+dropout = 0.1
+
+learning_rate = 6e-4
+max_iters = 5000
+lr_decay_iters = 5000
+min_lr = 6e-5
+beta2 = 0.99
+warmup_iters = 200
+
+device = "mps"
+compile = False
+dtype = "float32"
+
+tokens per iteration will be: 8,192
+found vocab_size = 50257 (inside data/gutenberg_scifi/meta.pkl)
+Initializing a new model from scratch
+number of parameters: 29.92M
+num decayed parameter tensors: 26, with 30,013,824 parameters
+num non-decayed parameter tensors: 13, with 4,992 parameters
+using fused AdamW: False
+step 0: train loss 10.8679, val loss 10.8629
+iter 0: loss 10.8622, time 62434.43ms, mfu -100.00%
+iter 10: loss 10.0384, time 926.38ms, mfu 0.53%
+iter 20: loss 9.8651, time 931.31ms, mfu 0.53%
+iter 30: loss 9.4893, time 915.94ms, mfu 0.53%
+iter 40: loss 8.9445, time 909.47ms, mfu 0.53%
+iter 50: loss 8.4438, time 937.49ms, mfu 0.53%
+iter 60: loss 7.6903, time 911.69ms, mfu 0.53%
+iter 70: loss 7.1358, time 903.99ms, mfu 0.53%
+iter 80: loss 6.9842, time 957.01ms, mfu 0.53%
+iter 90: loss 6.8760, time 912.39ms, mfu 0.53%
+iter 100: loss 6.4895, time 932.22ms, mfu 0.53%
+iter 110: loss 6.5053, time 913.70ms, mfu 0.53%
+iter 120: loss 6.5519, time 920.66ms, mfu 0.53%
+iter 130: loss 6.1861, time 912.56ms, mfu 0.53%
+iter 140: loss 6.1916, time 900.76ms, mfu 0.53%
+iter 150: loss 6.0543, time 902.94ms, mfu 0.53%
+iter 160: loss 5.9154, time 899.14ms, mfu 0.53%
+iter 170: loss 5.7784, time 917.35ms, mfu 0.53%
+iter 180: loss 5.9865, time 919.07ms, mfu 0.53%
+iter 190: loss 5.7552, time 913.34ms, mfu 0.53%
+iter 200: loss 5.7816, time 903.60ms, mfu 0.54%
+iter 210: loss 5.6188, time 906.59ms, mfu 0.54%
+iter 220: loss 5.8176, time 918.41ms, mfu 0.54%
+iter 230: loss 5.7390, time 906.70ms, mfu 0.54%
+iter 240: loss 5.6316, time 926.09ms, mfu 0.54%
+step 250: train loss 5.6468, val loss 5.6225
+saving checkpoint to out-gutenberg-scifi-mps
+iter 250: loss 5.7272, time 59580.08ms, mfu 0.48%
+iter 260: loss 5.6488, time 897.01ms, mfu 0.49%
+iter 270: loss 5.5057, time 907.14ms, mfu 0.49%
+iter 280: loss 5.6852, time 901.07ms, mfu 0.50%
+iter 290: loss 5.7982, time 914.77ms, mfu 0.50%
+iter 300: loss 5.5351, time 915.99ms, mfu 0.51%
+iter 310: loss 5.6305, time 894.91ms, mfu 0.51%
+iter 320: loss 5.3492, time 908.09ms, mfu 0.51%
+iter 330: loss 5.2648, time 894.94ms, mfu 0.52%
+iter 340: loss 5.4116, time 893.30ms, mfu 0.52%
+iter 350: loss 5.3609, time 904.06ms, mfu 0.52%
+iter 360: loss 5.3227, time 911.69ms, mfu 0.52%
+iter 370: loss 5.4960, time 905.70ms, mfu 0.53%
+iter 380: loss 5.4090, time 908.43ms, mfu 0.53%
+iter 390: loss 5.4152, time 905.98ms, mfu 0.53%
+iter 400: loss 5.1467, time 897.59ms, mfu 0.53%
+iter 410: loss 5.3135, time 907.49ms, mfu 0.53%
+iter 420: loss 5.4899, time 910.07ms, mfu 0.53%
+iter 430: loss 5.2549, time 911.96ms, mfu 0.53%
+iter 440: loss 5.4521, time 901.07ms, mfu 0.53%
+iter 450: loss 5.2057, time 918.35ms, mfu 0.53%
+iter 460: loss 5.1350, time 912.53ms, mfu 0.53%
+iter 470: loss 5.0055, time 914.02ms, mfu 0.53%
+iter 480: loss 5.3218, time 906.67ms, mfu 0.53%
+iter 490: loss 5.1209, time 900.49ms, mfu 0.54%
+step 500: train loss 5.1120, val loss 5.1143
+saving checkpoint to out-gutenberg-scifi-mps
+iter 500: loss 5.2047, time 58662.61ms, mfu 0.48%
+iter 510: loss 5.2536, time 915.79ms, mfu 0.49%
+iter 520: loss 5.2739, time 918.29ms, mfu 0.49%
+iter 530: loss 5.0808, time 906.07ms, mfu 0.50%
+iter 540: loss 5.1315, time 912.05ms, mfu 0.50%
+iter 550: loss 5.2407, time 921.33ms, mfu 0.50%
+iter 560: loss 5.2645, time 911.85ms, mfu 0.51%
+iter 570: loss 5.1481, time 919.90ms, mfu 0.51%
+iter 580: loss 5.1777, time 908.32ms, mfu 0.51%
+iter 590: loss 5.0280, time 909.54ms, mfu 0.52%
+iter 600: loss 5.1429, time 911.65ms, mfu 0.52%
+iter 610: loss 4.9584, time 904.02ms, mfu 0.52%
+iter 620: loss 4.9265, time 912.60ms, mfu 0.52%
+iter 630: loss 5.0223, time 912.81ms, mfu 0.52%
+iter 640: loss 5.1371, time 911.74ms, mfu 0.52%
+iter 650: loss 4.8662, time 909.03ms, mfu 0.53%
+iter 660: loss 4.9031, time 909.38ms, mfu 0.53%
+iter 670: loss 4.9319, time 916.89ms, mfu 0.53%
+iter 680: loss 4.9418, time 914.50ms, mfu 0.53%
+iter 690: loss 5.1930, time 907.13ms, mfu 0.53%
+iter 700: loss 4.9998, time 895.29ms, mfu 0.53%
+iter 710: loss 5.0535, time 905.56ms, mfu 0.53%
+iter 720: loss 4.9215, time 914.50ms, mfu 0.53%
+iter 730: loss 4.9390, time 907.50ms, mfu 0.53%
+iter 740: loss 4.9947, time 908.63ms, mfu 0.53%
+step 750: train loss 4.8894, val loss 4.8643
+saving checkpoint to out-gutenberg-scifi-mps
+iter 750: loss 4.8924, time 58612.59ms, mfu 0.48%
+iter 760: loss 4.8656, time 909.71ms, mfu 0.49%
+iter 770: loss 4.8274, time 906.84ms, mfu 0.49%
+iter 780: loss 4.8841, time 909.11ms, mfu 0.50%
+iter 790: loss 4.9573, time 902.12ms, mfu 0.50%
+iter 800: loss 4.8614, time 912.75ms, mfu 0.51%
+iter 810: loss 4.9114, time 914.64ms, mfu 0.51%
+iter 820: loss 4.9795, time 896.61ms, mfu 0.51%
+iter 830: loss 4.9083, time 906.73ms, mfu 0.51%
+iter 840: loss 4.6495, time 904.33ms, mfu 0.52%
+iter 850: loss 4.8053, time 908.51ms, mfu 0.52%
+iter 860: loss 5.0041, time 915.05ms, mfu 0.52%
+iter 870: loss 5.0390, time 931.17ms, mfu 0.52%
+iter 880: loss 4.6672, time 908.52ms, mfu 0.52%
+iter 890: loss 4.8917, time 894.67ms, mfu 0.53%
+iter 900: loss 4.8653, time 921.55ms, mfu 0.53%
+iter 910: loss 4.9163, time 899.63ms, mfu 0.53%
+iter 920: loss 4.8428, time 908.41ms, mfu 0.53%
+iter 930: loss 4.7504, time 909.46ms, mfu 0.53%
+iter 940: loss 4.8281, time 921.02ms, mfu 0.53%
+iter 950: loss 4.7564, time 902.92ms, mfu 0.53%
+iter 960: loss 4.8199, time 910.56ms, mfu 0.53%
+iter 970: loss 4.6281, time 913.45ms, mfu 0.53%
+iter 980: loss 4.7211, time 906.74ms, mfu 0.53%
+iter 990: loss 4.7686, time 906.03ms, mfu 0.53%
+step 1000: train loss 4.7086, val loss 4.7070
+saving checkpoint to out-gutenberg-scifi-mps
+iter 1000: loss 4.7574, time 58617.59ms, mfu 0.48%
+iter 1010: loss 5.0066, time 913.20ms, mfu 0.49%
+iter 1020: loss 4.7557, time 902.15ms, mfu 0.49%
+iter 1030: loss 4.8108, time 902.85ms, mfu 0.50%
+iter 1040: loss 4.7228, time 911.12ms, mfu 0.50%
+iter 1050: loss 4.7520, time 906.68ms, mfu 0.51%
+iter 1060: loss 4.6903, time 910.87ms, mfu 0.51%
+iter 1070: loss 4.6993, time 908.84ms, mfu 0.51%
+iter 1080: loss 4.7155, time 901.39ms, mfu 0.52%
+iter 1090: loss 4.4648, time 914.65ms, mfu 0.52%
+iter 1100: loss 4.7924, time 904.33ms, mfu 0.52%
+iter 1110: loss 4.7942, time 909.27ms, mfu 0.52%
+iter 1120: loss 4.5923, time 912.43ms, mfu 0.52%
+iter 1130: loss 4.7570, time 898.21ms, mfu 0.53%
+iter 1140: loss 4.6126, time 905.89ms, mfu 0.53%
+iter 1150: loss 4.7111, time 901.20ms, mfu 0.53%
+iter 1160: loss 4.7454, time 911.06ms, mfu 0.53%
+iter 1170: loss 4.7103, time 906.64ms, mfu 0.53%
+iter 1180: loss 4.5694, time 913.04ms, mfu 0.53%
+iter 1190: loss 4.7930, time 915.69ms, mfu 0.53%
+iter 1200: loss 4.6583, time 906.97ms, mfu 0.53%
+iter 1210: loss 4.5815, time 905.90ms, mfu 0.53%
+iter 1220: loss 4.5440, time 904.19ms, mfu 0.53%
+iter 1230: loss 4.6568, time 909.23ms, mfu 0.53%
+iter 1240: loss 4.7357, time 916.00ms, mfu 0.53%
+step 1250: train loss 4.5683, val loss 4.5815
+saving checkpoint to out-gutenberg-scifi-mps
+iter 1250: loss 4.5198, time 58580.84ms, mfu 0.48%
+iter 1260: loss 4.7101, time 913.18ms, mfu 0.49%
+iter 1270: loss 4.5964, time 974.19ms, mfu 0.49%
+iter 1280: loss 4.6475, time 906.59ms, mfu 0.49%
+iter 1290: loss 4.7342, time 909.76ms, mfu 0.50%
+iter 1300: loss 4.5799, time 898.54ms, mfu 0.50%
+iter 1310: loss 4.7302, time 921.56ms, mfu 0.51%
+iter 1320: loss 4.6728, time 917.58ms, mfu 0.51%
+iter 1330: loss 4.7496, time 899.66ms, mfu 0.51%
+iter 1340: loss 4.8595, time 892.76ms, mfu 0.52%
+iter 1350: loss 4.5742, time 907.73ms, mfu 0.52%
+iter 1360: loss 4.5707, time 910.62ms, mfu 0.52%
+iter 1370: loss 4.7099, time 912.13ms, mfu 0.52%
+iter 1380: loss 4.4625, time 909.00ms, mfu 0.52%
+iter 1390: loss 4.4961, time 915.84ms, mfu 0.52%
+iter 1400: loss 4.4855, time 903.55ms, mfu 0.53%
+iter 1410: loss 4.7282, time 903.00ms, mfu 0.53%
+iter 1420: loss 4.5512, time 912.30ms, mfu 0.53%
+iter 1430: loss 4.6980, time 902.67ms, mfu 0.53%
+iter 1440: loss 4.4767, time 903.63ms, mfu 0.53%
+iter 1450: loss 4.4636, time 916.56ms, mfu 0.53%
+iter 1460: loss 4.6459, time 914.49ms, mfu 0.53%
+iter 1470: loss 4.5794, time 906.79ms, mfu 0.53%
+iter 1480: loss 4.4580, time 907.59ms, mfu 0.53%
+iter 1490: loss 4.4888, time 905.55ms, mfu 0.53%
+step 1500: train loss 4.4774, val loss 4.4795
+saving checkpoint to out-gutenberg-scifi-mps
+iter 1500: loss 4.6489, time 58618.39ms, mfu 0.48%
+iter 1510: loss 4.3959, time 916.65ms, mfu 0.49%
+iter 1520: loss 4.2055, time 909.38ms, mfu 0.49%
+iter 1530: loss 4.4171, time 907.52ms, mfu 0.50%
+iter 1540: loss 4.5657, time 902.75ms, mfu 0.50%
+iter 1550: loss 4.4263, time 946.90ms, mfu 0.50%
+iter 1560: loss 4.5866, time 917.47ms, mfu 0.51%
+iter 1570: loss 4.4540, time 916.47ms, mfu 0.51%
+iter 1580: loss 4.5778, time 913.61ms, mfu 0.51%
+iter 1590: loss 4.7083, time 917.46ms, mfu 0.51%
+iter 1600: loss 4.4078, time 905.89ms, mfu 0.52%
+iter 1610: loss 4.3959, time 929.78ms, mfu 0.52%
+iter 1620: loss 4.4593, time 908.75ms, mfu 0.52%
+iter 1630: loss 4.5461, time 915.69ms, mfu 0.52%
+iter 1640: loss 4.6055, time 925.85ms, mfu 0.52%
+iter 1650: loss 4.5255, time 915.01ms, mfu 0.52%
+iter 1660: loss 4.3489, time 915.01ms, mfu 0.52%
+iter 1670: loss 4.3774, time 927.75ms, mfu 0.53%
+iter 1680: loss 4.4759, time 923.11ms, mfu 0.53%
+iter 1690: loss 4.4439, time 921.98ms, mfu 0.53%
+iter 1700: loss 4.4455, time 919.46ms, mfu 0.53%
+iter 1710: loss 4.3241, time 921.52ms, mfu 0.53%
+iter 1720: loss 4.3758, time 939.00ms, mfu 0.53%
+iter 1730: loss 4.4204, time 929.03ms, mfu 0.53%
+iter 1740: loss 4.3877, time 914.52ms, mfu 0.53%
+step 1750: train loss 4.3888, val loss 4.4258
+saving checkpoint to out-gutenberg-scifi-mps
+iter 1750: loss 4.4653, time 59380.57ms, mfu 0.48%
+iter 1760: loss 4.5327, time 913.03ms, mfu 0.48%
+iter 1770: loss 4.4639, time 900.56ms, mfu 0.49%
+iter 1780: loss 4.3531, time 909.09ms, mfu 0.49%
+iter 1790: loss 4.2241, time 920.43ms, mfu 0.50%
+iter 1800: loss 4.4226, time 909.66ms, mfu 0.50%
+iter 1810: loss 4.5612, time 914.86ms, mfu 0.50%
+iter 1820: loss 4.5191, time 914.47ms, mfu 0.51%
+iter 1830: loss 4.5316, time 913.97ms, mfu 0.51%
+iter 1840: loss 4.5097, time 903.80ms, mfu 0.51%
+iter 1850: loss 4.6418, time 910.49ms, mfu 0.52%
+iter 1860: loss 4.4013, time 914.53ms, mfu 0.52%
+iter 1870: loss 4.4834, time 911.99ms, mfu 0.52%
+iter 1880: loss 4.3381, time 895.47ms, mfu 0.52%
+iter 1890: loss 4.2449, time 895.85ms, mfu 0.53%
+iter 1900: loss 4.3389, time 898.65ms, mfu 0.53%
+iter 1910: loss 4.4001, time 911.30ms, mfu 0.53%
+iter 1920: loss 4.3862, time 903.99ms, mfu 0.53%
+iter 1930: loss 4.3669, time 907.40ms, mfu 0.53%
+iter 1940: loss 4.4027, time 907.00ms, mfu 0.53%
+iter 1950: loss 4.3852, time 906.14ms, mfu 0.53%
+iter 1960: loss 4.1152, time 913.71ms, mfu 0.53%
+iter 1970: loss 4.4139, time 901.35ms, mfu 0.53%
+iter 1980: loss 4.3867, time 908.42ms, mfu 0.53%
+iter 1990: loss 4.2446, time 900.57ms, mfu 0.54%
+step 2000: train loss 4.3409, val loss 4.3469
+saving checkpoint to out-gutenberg-scifi-mps
+iter 2000: loss 4.3119, time 58511.33ms, mfu 0.48%
+iter 2010: loss 4.4253, time 908.59ms, mfu 0.49%
+iter 2020: loss 4.4198, time 909.56ms, mfu 0.49%
+iter 2030: loss 4.3066, time 906.00ms, mfu 0.50%
+iter 2040: loss 4.4196, time 917.69ms, mfu 0.50%
+iter 2050: loss 4.2170, time 904.96ms, mfu 0.51%
+iter 2060: loss 4.3240, time 907.82ms, mfu 0.51%
+iter 2070: loss 4.4784, time 914.06ms, mfu 0.51%
+iter 2080: loss 4.4651, time 925.86ms, mfu 0.51%
+iter 2090: loss 4.3083, time 918.59ms, mfu 0.52%
+iter 2100: loss 4.4292, time 902.48ms, mfu 0.52%
+iter 2110: loss 4.4369, time 894.70ms, mfu 0.52%
+iter 2120: loss 4.2389, time 909.71ms, mfu 0.52%
+iter 2130: loss 4.3528, time 914.91ms, mfu 0.52%
+iter 2140: loss 4.3508, time 917.44ms, mfu 0.53%
+iter 2150: loss 4.4851, time 913.55ms, mfu 0.53%
+iter 2160: loss 4.4197, time 909.41ms, mfu 0.53%
+iter 2170: loss 4.3110, time 910.94ms, mfu 0.53%
+iter 2180: loss 4.2237, time 912.20ms, mfu 0.53%
+iter 2190: loss 4.2687, time 896.54ms, mfu 0.53%
+iter 2200: loss 4.3472, time 911.43ms, mfu 0.53%
+iter 2210: loss 4.3423, time 924.89ms, mfu 0.53%
+iter 2220: loss 4.3120, time 911.79ms, mfu 0.53%
+iter 2230: loss 4.1800, time 901.65ms, mfu 0.53%
+iter 2240: loss 4.3573, time 913.57ms, mfu 0.53%
+step 2250: train loss 4.2833, val loss 4.2949
+saving checkpoint to out-gutenberg-scifi-mps
+iter 2250: loss 4.3519, time 58544.43ms, mfu 0.48%
+iter 2260: loss 4.2853, time 907.07ms, mfu 0.49%
+iter 2270: loss 4.2550, time 914.66ms, mfu 0.49%
+iter 2280: loss 4.3512, time 914.92ms, mfu 0.50%
+iter 2290: loss 4.3587, time 914.26ms, mfu 0.50%
+iter 2300: loss 4.3615, time 915.41ms, mfu 0.50%
+iter 2310: loss 4.3932, time 900.79ms, mfu 0.51%
+iter 2320: loss 4.2007, time 903.86ms, mfu 0.51%
+iter 2330: loss 4.3005, time 911.87ms, mfu 0.51%
+iter 2340: loss 4.1543, time 907.16ms, mfu 0.52%
+iter 2350: loss 4.3499, time 901.59ms, mfu 0.52%
+iter 2360: loss 4.3537, time 906.43ms, mfu 0.52%
+iter 2370: loss 4.2217, time 913.91ms, mfu 0.52%
+iter 2380: loss 4.3235, time 916.03ms, mfu 0.52%
+iter 2390: loss 4.3323, time 912.11ms, mfu 0.53%
+iter 2400: loss 4.2606, time 909.88ms, mfu 0.53%
+iter 2410: loss 4.4704, time 911.82ms, mfu 0.53%
+iter 2420: loss 4.3476, time 901.43ms, mfu 0.53%
+iter 2430: loss 4.4086, time 904.79ms, mfu 0.53%
+iter 2440: loss 4.1893, time 902.26ms, mfu 0.53%
+iter 2450: loss 4.3909, time 909.01ms, mfu 0.53%
+iter 2460: loss 4.3491, time 906.53ms, mfu 0.53%
+iter 2470: loss 4.1327, time 909.17ms, mfu 0.53%
+iter 2480: loss 4.1436, time 900.45ms, mfu 0.53%
+iter 2490: loss 4.2762, time 908.89ms, mfu 0.54%
+step 2500: train loss 4.2292, val loss 4.2547
+saving checkpoint to out-gutenberg-scifi-mps
+iter 2500: loss 4.2381, time 58599.23ms, mfu 0.48%
+iter 2510: loss 4.2460, time 913.16ms, mfu 0.49%
+iter 2520: loss 4.2546, time 929.99ms, mfu 0.49%
+iter 2530: loss 4.2754, time 911.19ms, mfu 0.50%
+iter 2540: loss 4.3217, time 931.46ms, mfu 0.50%
+iter 2550: loss 3.8321, time 915.51ms, mfu 0.50%
+iter 2560: loss 4.3294, time 921.28ms, mfu 0.51%
+iter 2570: loss 4.2763, time 933.19ms, mfu 0.51%
+iter 2580: loss 4.1946, time 919.41ms, mfu 0.51%
+iter 2590: loss 4.1587, time 914.09ms, mfu 0.51%
+iter 2600: loss 4.2902, time 910.55ms, mfu 0.52%
+iter 2610: loss 4.2327, time 903.95ms, mfu 0.52%
+iter 2620: loss 4.3273, time 905.30ms, mfu 0.52%
+iter 2630: loss 4.2528, time 912.47ms, mfu 0.52%
+iter 2640: loss 4.2309, time 910.17ms, mfu 0.52%
+iter 2650: loss 4.3848, time 916.09ms, mfu 0.52%
+iter 2660: loss 4.3502, time 907.72ms, mfu 0.53%
+iter 2670: loss 4.2886, time 908.85ms, mfu 0.53%
+iter 2680: loss 3.9391, time 912.15ms, mfu 0.53%
+iter 2690: loss 4.1231, time 911.63ms, mfu 0.53%
+iter 2700: loss 4.3292, time 909.76ms, mfu 0.53%
+iter 2710: loss 4.2911, time 909.87ms, mfu 0.53%
+iter 2720: loss 4.1764, time 906.77ms, mfu 0.53%
+iter 2730: loss 4.2309, time 898.59ms, mfu 0.53%
+iter 2740: loss 4.2331, time 904.80ms, mfu 0.53%
+step 2750: train loss 4.1858, val loss 4.2174
+saving checkpoint to out-gutenberg-scifi-mps
+iter 2750: loss 4.3345, time 58513.79ms, mfu 0.48%
+iter 2760: loss 4.3270, time 903.18ms, mfu 0.49%
+iter 2770: loss 4.3765, time 905.09ms, mfu 0.49%
+iter 2780: loss 4.2604, time 905.82ms, mfu 0.50%
+iter 2790: loss 4.2999, time 895.18ms, mfu 0.50%
+iter 2800: loss 4.4416, time 909.15ms, mfu 0.51%
+iter 2810: loss 4.2336, time 911.52ms, mfu 0.51%
+iter 2820: loss 4.2509, time 909.70ms, mfu 0.51%
+iter 2830: loss 4.1472, time 919.40ms, mfu 0.51%
+iter 2840: loss 4.1173, time 919.15ms, mfu 0.52%
+iter 2850: loss 4.1212, time 919.69ms, mfu 0.52%
+iter 2860: loss 4.3213, time 916.41ms, mfu 0.52%
+iter 2870: loss 4.1666, time 919.79ms, mfu 0.52%
+iter 2880: loss 4.4084, time 907.18ms, mfu 0.52%
+iter 2890: loss 4.1762, time 905.43ms, mfu 0.52%
+iter 2900: loss 4.2179, time 913.73ms, mfu 0.53%
+iter 2910: loss 4.2352, time 904.74ms, mfu 0.53%
+iter 2920: loss 4.4210, time 915.49ms, mfu 0.53%
+iter 2930: loss 4.3483, time 901.39ms, mfu 0.53%
+iter 2940: loss 4.2913, time 908.64ms, mfu 0.53%
+iter 2950: loss 4.1113, time 910.73ms, mfu 0.53%
+iter 2960: loss 4.1317, time 904.59ms, mfu 0.53%
+iter 2970: loss 4.3623, time 899.36ms, mfu 0.53%
+iter 2980: loss 4.2259, time 911.62ms, mfu 0.53%
+iter 2990: loss 4.2124, time 913.69ms, mfu 0.53%
+step 3000: train loss 4.1380, val loss 4.1613
+saving checkpoint to out-gutenberg-scifi-mps
+iter 3000: loss 4.2525, time 58727.68ms, mfu 0.48%
+iter 3010: loss 4.1094, time 912.12ms, mfu 0.49%
+iter 3020: loss 4.1746, time 910.28ms, mfu 0.49%
+iter 3030: loss 4.2967, time 909.82ms, mfu 0.50%
+iter 3040: loss 4.2142, time 893.63ms, mfu 0.50%
+iter 3050: loss 4.2720, time 909.40ms, mfu 0.51%
+iter 3060: loss 4.3386, time 908.59ms, mfu 0.51%
+iter 3070: loss 4.1546, time 935.29ms, mfu 0.51%
+iter 3080: loss 4.1395, time 903.68ms, mfu 0.51%
+iter 3090: loss 4.1659, time 917.29ms, mfu 0.52%
+iter 3100: loss 4.2668, time 915.81ms, mfu 0.52%
+iter 3110: loss 4.2373, time 903.82ms, mfu 0.52%
+iter 3120: loss 4.3378, time 919.23ms, mfu 0.52%
+iter 3130: loss 4.1372, time 902.30ms, mfu 0.52%
+iter 3140: loss 4.1530, time 905.48ms, mfu 0.53%
+iter 3150: loss 4.1233, time 918.89ms, mfu 0.53%
+iter 3160: loss 4.1742, time 912.52ms, mfu 0.53%
+iter 3170: loss 4.3627, time 918.61ms, mfu 0.53%
+iter 3180: loss 4.0776, time 925.49ms, mfu 0.53%
+iter 3190: loss 4.2004, time 915.59ms, mfu 0.53%
+iter 3200: loss 4.2333, time 936.55ms, mfu 0.53%
+iter 3210: loss 4.2115, time 914.86ms, mfu 0.53%
+iter 3220: loss 4.1633, time 912.14ms, mfu 0.53%
+iter 3230: loss 4.1409, time 908.06ms, mfu 0.53%
+iter 3240: loss 4.1687, time 920.94ms, mfu 0.53%
+step 3250: train loss 4.1270, val loss 4.1297
+saving checkpoint to out-gutenberg-scifi-mps
+iter 3250: loss 4.0912, time 58629.94ms, mfu 0.48%
+iter 3260: loss 4.0487, time 905.38ms, mfu 0.48%
+iter 3270: loss 4.2995, time 905.70ms, mfu 0.49%
+iter 3280: loss 4.1610, time 910.54ms, mfu 0.50%
+iter 3290: loss 4.1591, time 906.34ms, mfu 0.50%
+iter 3300: loss 4.2166, time 898.62ms, mfu 0.50%
+iter 3310: loss 4.1950, time 939.41ms, mfu 0.51%
+iter 3320: loss 3.9965, time 914.87ms, mfu 0.51%
+iter 3330: loss 4.2739, time 918.67ms, mfu 0.51%
+iter 3340: loss 4.2613, time 912.58ms, mfu 0.51%
+iter 3350: loss 4.1913, time 907.36ms, mfu 0.52%
+iter 3360: loss 4.2793, time 912.77ms, mfu 0.52%
+iter 3370: loss 4.1644, time 908.90ms, mfu 0.52%
+iter 3380: loss 4.1550, time 910.39ms, mfu 0.52%
+iter 3390: loss 4.3132, time 917.29ms, mfu 0.52%
+iter 3400: loss 4.0968, time 908.58ms, mfu 0.53%
+iter 3410: loss 4.1609, time 897.28ms, mfu 0.53%
+iter 3420: loss 4.3827, time 904.30ms, mfu 0.53%
+iter 3430: loss 4.1498, time 912.89ms, mfu 0.53%
+iter 3440: loss 3.8722, time 895.04ms, mfu 0.53%
+iter 3450: loss 4.1717, time 910.50ms, mfu 0.53%
+iter 3460: loss 4.1286, time 906.58ms, mfu 0.53%
+iter 3470: loss 4.1225, time 897.64ms, mfu 0.53%
+iter 3480: loss 4.2905, time 896.53ms, mfu 0.54%
+iter 3490: loss 4.1327, time 913.70ms, mfu 0.54%
+step 3500: train loss 4.0816, val loss 4.1175
+saving checkpoint to out-gutenberg-scifi-mps
+iter 3500: loss 4.2703, time 58557.04ms, mfu 0.48%
+iter 3510: loss 4.2851, time 901.88ms, mfu 0.49%
+iter 3520: loss 4.1820, time 901.22ms, mfu 0.49%
+iter 3530: loss 4.3130, time 904.65ms, mfu 0.50%
+iter 3540: loss 4.1015, time 905.67ms, mfu 0.50%
+iter 3550: loss 4.2637, time 912.10ms, mfu 0.51%
+iter 3560: loss 4.3063, time 910.51ms, mfu 0.51%
+iter 3570: loss 4.1513, time 906.94ms, mfu 0.51%
+iter 3580: loss 4.0580, time 894.85ms, mfu 0.52%
+iter 3590: loss 4.3521, time 917.13ms, mfu 0.52%
+iter 3600: loss 4.1204, time 931.45ms, mfu 0.52%
+iter 3610: loss 4.1730, time 893.05ms, mfu 0.52%
+iter 3620: loss 3.9523, time 902.67ms, mfu 0.52%
+iter 3630: loss 4.1565, time 906.04ms, mfu 0.53%
+iter 3640: loss 3.9499, time 917.01ms, mfu 0.53%
+iter 3650: loss 4.1591, time 921.67ms, mfu 0.53%
+iter 3660: loss 4.0961, time 901.70ms, mfu 0.53%
+iter 3670: loss 4.2143, time 902.34ms, mfu 0.53%
+iter 3680: loss 3.9986, time 900.22ms, mfu 0.53%
+iter 3690: loss 4.0651, time 889.63ms, mfu 0.53%
+iter 3700: loss 3.8580, time 914.50ms, mfu 0.53%
+iter 3710: loss 4.1049, time 906.19ms, mfu 0.53%
+iter 3720: loss 4.0718, time 908.68ms, mfu 0.53%
+iter 3730: loss 4.0768, time 914.44ms, mfu 0.53%
+iter 3740: loss 4.0213, time 906.04ms, mfu 0.54%
+step 3750: train loss 4.0613, val loss 4.0899
+saving checkpoint to out-gutenberg-scifi-mps
+iter 3750: loss 4.1159, time 58565.26ms, mfu 0.48%
+iter 3760: loss 4.2830, time 910.18ms, mfu 0.49%
+iter 3770: loss 4.0101, time 914.09ms, mfu 0.49%
+iter 3780: loss 4.2179, time 914.14ms, mfu 0.50%
+iter 3790: loss 4.1853, time 926.17ms, mfu 0.50%
+iter 3800: loss 4.1384, time 914.61ms, mfu 0.50%
+iter 3810: loss 4.0234, time 911.84ms, mfu 0.51%
+iter 3820: loss 4.2270, time 902.74ms, mfu 0.51%
+iter 3830: loss 4.1557, time 907.68ms, mfu 0.51%
+iter 3840: loss 4.2462, time 900.63ms, mfu 0.52%
+iter 3850: loss 4.1979, time 908.69ms, mfu 0.52%
+iter 3860: loss 4.1770, time 908.91ms, mfu 0.52%
+iter 3870: loss 4.1079, time 907.03ms, mfu 0.52%
+iter 3880: loss 4.2552, time 907.62ms, mfu 0.52%
+iter 3890: loss 4.1042, time 910.26ms, mfu 0.53%
+iter 3900: loss 4.2870, time 916.70ms, mfu 0.53%
+iter 3910: loss 4.0785, time 906.89ms, mfu 0.53%
+iter 3920: loss 4.0253, time 911.24ms, mfu 0.53%
+iter 3930: loss 3.9835, time 904.70ms, mfu 0.53%
+iter 3940: loss 4.1093, time 907.29ms, mfu 0.53%
+iter 3950: loss 4.0503, time 898.59ms, mfu 0.53%
+iter 3960: loss 4.1643, time 912.39ms, mfu 0.53%
+iter 3970: loss 4.0595, time 904.90ms, mfu 0.53%
+iter 3980: loss 4.0466, time 900.41ms, mfu 0.54%
+iter 3990: loss 4.0982, time 913.42ms, mfu 0.54%
+step 4000: train loss 4.0269, val loss 4.0690
+saving checkpoint to out-gutenberg-scifi-mps
+iter 4000: loss 4.0739, time 58543.60ms, mfu 0.48%
+iter 4010: loss 3.9839, time 910.75ms, mfu 0.49%
+iter 4020: loss 3.8654, time 910.31ms, mfu 0.49%
+iter 4030: loss 4.0548, time 905.28ms, mfu 0.50%
+iter 4040: loss 4.2756, time 907.14ms, mfu 0.50%
+iter 4050: loss 4.2039, time 909.43ms, mfu 0.51%
+iter 4060: loss 4.1804, time 907.60ms, mfu 0.51%
+iter 4070: loss 4.1646, time 915.27ms, mfu 0.51%
+iter 4080: loss 4.2711, time 916.49ms, mfu 0.51%
+iter 4090: loss 4.2903, time 894.24ms, mfu 0.52%
+iter 4100: loss 4.1247, time 903.16ms, mfu 0.52%
+iter 4110: loss 3.9249, time 902.39ms, mfu 0.52%
+iter 4120: loss 4.1967, time 910.42ms, mfu 0.52%
+iter 4130: loss 3.9909, time 913.82ms, mfu 0.53%
+iter 4140: loss 4.0773, time 914.18ms, mfu 0.53%
+iter 4150: loss 4.0006, time 911.66ms, mfu 0.53%
+iter 4160: loss 4.1030, time 905.21ms, mfu 0.53%
+iter 4170: loss 4.1762, time 910.76ms, mfu 0.53%
+iter 4180: loss 4.3647, time 903.94ms, mfu 0.53%
+iter 4190: loss 4.0378, time 911.59ms, mfu 0.53%
+iter 4200: loss 4.1431, time 893.50ms, mfu 0.53%
+iter 4210: loss 4.0414, time 914.24ms, mfu 0.53%
+iter 4220: loss 4.1516, time 922.23ms, mfu 0.53%
+iter 4230: loss 4.1157, time 905.89ms, mfu 0.53%
+iter 4240: loss 4.0796, time 903.61ms, mfu 0.53%
+step 4250: train loss 4.0244, val loss 4.0409
+saving checkpoint to out-gutenberg-scifi-mps
+iter 4250: loss 4.0514, time 58465.88ms, mfu 0.48%
+iter 4260: loss 4.0679, time 913.20ms, mfu 0.49%
+iter 4270: loss 4.1200, time 900.32ms, mfu 0.49%
+iter 4280: loss 4.0601, time 918.15ms, mfu 0.50%
+iter 4290: loss 4.0372, time 906.75ms, mfu 0.50%
+iter 4300: loss 4.0540, time 900.75ms, mfu 0.51%
+iter 4310: loss 4.2585, time 905.04ms, mfu 0.51%
+iter 4320: loss 4.0031, time 908.81ms, mfu 0.51%
+iter 4330: loss 4.1174, time 928.89ms, mfu 0.51%
+iter 4340: loss 3.8992, time 914.41ms, mfu 0.52%
+iter 4350: loss 4.0380, time 902.71ms, mfu 0.52%
+iter 4360: loss 3.9215, time 912.46ms, mfu 0.52%
+iter 4370: loss 4.0952, time 906.86ms, mfu 0.52%
+iter 4380: loss 3.9216, time 908.13ms, mfu 0.52%
+iter 4390: loss 4.0421, time 916.57ms, mfu 0.53%
+iter 4400: loss 4.1228, time 921.32ms, mfu 0.53%
+iter 4410: loss 4.1022, time 909.38ms, mfu 0.53%
+iter 4420: loss 3.9583, time 920.20ms, mfu 0.53%
+iter 4430: loss 4.0499, time 923.59ms, mfu 0.53%
+iter 4440: loss 4.1495, time 895.80ms, mfu 0.53%
+iter 4450: loss 3.9568, time 908.90ms, mfu 0.53%
+iter 4460: loss 4.0974, time 909.90ms, mfu 0.53%
+iter 4470: loss 4.1694, time 915.05ms, mfu 0.53%
+iter 4480: loss 4.0180, time 912.36ms, mfu 0.53%
+iter 4490: loss 4.2921, time 900.03ms, mfu 0.53%
+step 4500: train loss 3.9930, val loss 4.0294
+saving checkpoint to out-gutenberg-scifi-mps
+iter 4500: loss 3.9668, time 58465.62ms, mfu 0.48%
+iter 4510: loss 4.0434, time 916.05ms, mfu 0.49%
+iter 4520: loss 3.9782, time 900.41ms, mfu 0.49%
+iter 4530: loss 4.0837, time 905.29ms, mfu 0.50%
+iter 4540: loss 4.0293, time 915.57ms, mfu 0.50%
+iter 4550: loss 4.1566, time 919.30ms, mfu 0.50%
+iter 4560: loss 4.2089, time 909.36ms, mfu 0.51%
+iter 4570: loss 3.9953, time 914.86ms, mfu 0.51%
+iter 4580: loss 4.1355, time 917.98ms, mfu 0.51%
+iter 4590: loss 4.0102, time 917.08ms, mfu 0.51%
+iter 4600: loss 4.1679, time 914.36ms, mfu 0.52%
+iter 4610: loss 3.9829, time 905.32ms, mfu 0.52%
+iter 4620: loss 3.9380, time 906.11ms, mfu 0.52%
+iter 4630: loss 4.1789, time 917.07ms, mfu 0.52%
+iter 4640: loss 3.9234, time 917.05ms, mfu 0.52%
+iter 4650: loss 4.1603, time 907.43ms, mfu 0.53%
+iter 4660: loss 3.9721, time 915.05ms, mfu 0.53%
+iter 4670: loss 4.1079, time 917.46ms, mfu 0.53%
+iter 4680: loss 4.1246, time 911.65ms, mfu 0.53%
+iter 4690: loss 4.1251, time 922.63ms, mfu 0.53%
+iter 4700: loss 4.1042, time 912.94ms, mfu 0.53%
+iter 4710: loss 4.1741, time 904.60ms, mfu 0.53%
+iter 4720: loss 3.9739, time 904.86ms, mfu 0.53%
+iter 4730: loss 4.0249, time 907.86ms, mfu 0.53%
+iter 4740: loss 4.2179, time 900.90ms, mfu 0.53%
+step 4750: train loss 3.9761, val loss 4.0215
+saving checkpoint to out-gutenberg-scifi-mps
+iter 4750: loss 4.0956, time 58495.79ms, mfu 0.48%
+iter 4760: loss 3.9065, time 913.17ms, mfu 0.49%
+iter 4770: loss 4.3096, time 919.80ms, mfu 0.49%
+iter 4780: loss 4.1496, time 904.12ms, mfu 0.50%
+iter 4790: loss 4.1371, time 904.15ms, mfu 0.50%
+iter 4800: loss 4.1713, time 915.07ms, mfu 0.50%
+iter 4810: loss 4.2316, time 908.34ms, mfu 0.51%
+iter 4820: loss 4.1398, time 909.09ms, mfu 0.51%
+iter 4830: loss 4.0974, time 911.59ms, mfu 0.51%
+iter 4840: loss 4.0620, time 904.90ms, mfu 0.52%
+iter 4850: loss 4.1078, time 910.44ms, mfu 0.52%
+iter 4860: loss 4.0621, time 908.60ms, mfu 0.52%
+iter 4870: loss 3.9888, time 893.89ms, mfu 0.52%
+iter 4880: loss 4.0972, time 911.75ms, mfu 0.52%
+iter 4890: loss 4.2133, time 909.60ms, mfu 0.53%
+iter 4900: loss 3.9434, time 899.76ms, mfu 0.53%
+iter 4910: loss 4.1231, time 914.69ms, mfu 0.53%
+iter 4920: loss 4.1253, time 894.70ms, mfu 0.53%
+iter 4930: loss 4.1159, time 905.26ms, mfu 0.53%
+iter 4940: loss 4.1888, time 900.91ms, mfu 0.53%
+iter 4950: loss 4.0551, time 913.49ms, mfu 0.53%
+iter 4960: loss 4.0162, time 906.19ms, mfu 0.53%
+iter 4970: loss 3.9188, time 916.42ms, mfu 0.53%
+iter 4980: loss 4.0630, time 904.91ms, mfu 0.53%
+iter 4990: loss 4.0108, time 910.17ms, mfu 0.54%
+step 5000: train loss 3.9834, val loss 4.0078
+saving checkpoint to out-gutenberg-scifi-mps
+iter 5000: loss 4.0895, time 58349.85ms, mfu 0.48%

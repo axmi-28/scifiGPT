@@ -14,6 +14,18 @@ The simplest, fastest repository for training/finetuning medium-sized GPTs. It i
 
 ![repro124m](assets/gpt2_124M_loss.png)
 
+## SciFiGPT (Gutenberg science fiction)
+
+This tree adds **SciFiGPT**: a small GPT-style Transformer trained from scratch on a [Project Gutenberg](https://www.gutenberg.org/)-style science fiction corpus (see [PROJECT_README.md](PROJECT_README.md)). It is a learning/portfolio skeleton: training works end-to-end, but validation loss lands around **~4** on a compact local run and **generations are still rough**—not a polished chat model.
+
+`train.bin`, `val.bin`, `meta.pkl`, checkpoints under `out-*`, and virtualenvs are gitignored. After `prepare.py` and training, you can sample and open the Streamlit UI.
+
+```sh
+python scripts/parse_training_log.py train_gutenberg_mps.log
+python scripts/evaluate_checkpoint.py --out_dir=out-gutenberg-scifi-mps --device=cpu
+streamlit run app.py
+```
+
 Because the code is so simple, it is very easy to hack to your needs, train new models from scratch, or finetune pretrained checkpoints (e.g. biggest one currently available as a starting point would be the GPT-2 1.3B model from OpenAI).
 
 ## install

@@ -6,7 +6,15 @@ __pycache__/
 *.bin
 *.pkl
 *.pt
+*.pth
+*.ckpt
 *.pyc
 input.txt
 env/
 venv/
+.venv/
+out*/
+wandb/
+.env
+.env.*
+!.env.example
